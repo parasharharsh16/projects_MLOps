@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
+from Utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval
+
 
 ###############################################################################
 # Digits dataset
@@ -36,6 +38,12 @@ from sklearn import datasets, metrics
 # 1. Load data
 digits = datasets.load_digits()
 
+
+#2. Split the dataset for train and test
+data = digits.images
+#X_train, X_test, y_train, y_test = split_data(data,digits.target,test_size=0.3)
+
+X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (data,digits.target,test_size=0.2, dev_size=0.1)
 # _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
 # for ax, image, label in zip(axes, digits.images, digits.target):
 #     ax.set_axis_off()
@@ -51,9 +59,18 @@ X_train, X_test, y_train, y_test = split_data(data,digits.target,test_size=0.3)
 X_test = preprocess_data(X_test)
 X_train = preprocess_data(X_train)
 
+X_dev = preprocess_data(X_dev)
+
 # 4. Model training
 # Create a classifier: a support vector classifier
 # Learn the digits on the train subset
+
+
+model = train_module(X_train,y_train,{'gamma': 0.001},X_dev,y_dev,model_type="svm")
+
+# Predict the value of the digit on the test subset
+predict_and_eval(model,X_test,y_test)
+
 
 model = train_module(X_train,y_train,{'gamma': 0.001},model_type="svm")
 
@@ -113,7 +130,4 @@ for gt in range(len(cm)):
         y_true += [gt] * cm[gt][pred]
         y_pred += [pred] * cm[gt][pred]
 
-print(
-    "Classification report rebuilt from confusion matrix:\n"
-    f"{metrics.classification_report(y_true, y_pred)}\n"
-)
+
