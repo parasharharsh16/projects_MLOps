@@ -15,17 +15,16 @@ def split_data(x,y,test_size,random_state=1):
     )
     return X_train,X_test,y_train,y_test
 
-def train_module(x,y,model_params, x_dev =None,y_dev =None,model_type = "sva"):
-def train_module(x,y,model_params, model_type = "sva"):
+def train_module(x,y,model_params, x_dev =None, y_dev =None, model_type = "sva"):
     if model_type == "svm":
         #create a classifier: a support vector classifier
         clf = svm.SVC
     model = clf(**model_params)
     #train the model
     model.fit(x,y)
-    if x_dev.any()!= None and y_dev.any() != None:
-        accuracy = model.score(x_dev,y_dev)
-        print("Accuracy on validiation data of this model is "+str(round(accuracy,3)*100)+"%\n\n")
+   # if x_dev.any()!= None and y_dev.any() != None:
+    # accuracy = model.score(x_dev,y_dev)
+    # print("Accuracy on validiation data of this model is "+str(round(accuracy,3)*100)+"%\n\n")
     return model
 
 def split_train_dev_test(x, y, test_size, dev_size,random_state=1):
