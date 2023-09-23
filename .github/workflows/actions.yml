@@ -23,4 +23,4 @@ jobs:
       - name: Running test cases
         run: pytest
       - name: Run python file
-        run: python code.py
+        run: python code_exp.py
