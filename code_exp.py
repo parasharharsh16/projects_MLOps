@@ -17,8 +17,7 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from Utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams
-import itertools
+from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters
 
 ###############################################################################
 # Digits dataset
@@ -68,7 +67,8 @@ params_grid = {
 test_size =[0.1, 0.2, 0.3]
 dev_size = [0.1, 0.2, 0.3]
 
-for test,dev in itertools.product(test_size,dev_size):
+
+for test,dev in getCombinationOfParameters(test_size,dev_size):
     train = 1-(test+dev)
     X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (data,digits.target,test_size=test, dev_size=dev)
     X_test = preprocess_data(X_test)

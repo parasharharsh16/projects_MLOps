@@ -3,6 +3,7 @@ from sklearn import svm,metrics
 import matplotlib.pyplot as plt
 from sklearn import svm
 from sklearn.model_selection import ParameterGrid
+import itertools
 #Util defination
 # flatten the images
 def preprocess_data(data):
@@ -94,3 +95,7 @@ def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params):
             best_params = hyper_params
             optimized_model = current_model
     return optimized_model,best_params,best_accu
+
+def getCombinationOfParameters(test_size,dev_size):
+    return list(itertools.product(test_size,dev_size))
+
