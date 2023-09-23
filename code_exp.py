@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from Utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters
+from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters
 
 ###############################################################################
 # Digits dataset

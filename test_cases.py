@@ -1,4 +1,4 @@
-from Utills import tune_hparams
+from utills import tune_hparams
 from sklearn.model_selection import ParameterGrid
 def test_check_hpram_combination_count():
     #this test case is to check all hparam combinations are generated
