@@ -91,8 +91,8 @@ for test,dev in getCombinationOfParameters(test_size,dev_size):
 #model = train_module(X_train,y_train,{'gamma': 0.001},model_type="svm")
 
 #Code for the Quiz
-print(f"Total samples in datasets are {total_sample_number(data)}")
+print(f"Total samples in datasets are {total_sample_number(X)}")
 
-height, width = size_of_image(data)
+height, width = size_of_image(X)
 
 print(f"Height of input image is {height} and width of image is {width}")
