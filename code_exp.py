@@ -17,7 +17,8 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,total_sample_number,size_of_image
+from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
+
 ###############################################################################
 # Digits dataset
 # --------------
@@ -34,14 +35,11 @@ from utills import split_data, preprocess_data, train_module,split_train_dev_tes
 
 
 # 1. Load data
-digits = datasets.load_digits()
-
-
+X,y = read_digit()
 #2. Split the dataset for train and test
-data = digits.images
-#X_train, X_test, y_train, y_test = split_data(data,digits.target,test_size=0.3)
 
-X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (data,digits.target,test_size=0.2, dev_size=0.1)
+
+X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=0.2, dev_size=0.1)
 # _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
 # for ax, image, label in zip(axes, digits.images, digits.target):
 #     ax.set_axis_off()
@@ -69,7 +67,7 @@ dev_size = [0.1, 0.2, 0.3]
 
 for test,dev in getCombinationOfParameters(test_size,dev_size):
     train = 1-(test+dev)
-    X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (data,digits.target,test_size=test, dev_size=dev)
+    X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=test, dev_size=dev)
     X_test = preprocess_data(X_test)
     X_train = preprocess_data(X_train)
     X_dev = preprocess_data(X_dev)
@@ -93,8 +91,8 @@ for test,dev in getCombinationOfParameters(test_size,dev_size):
 #model = train_module(X_train,y_train,{'gamma': 0.001},model_type="svm")
 
 #Code for the Quiz
-print(f"Total samples in datasets are {total_sample_number(data)}")
+print(f"Total samples in datasets are {total_sample_number(X)}")
 
-height, width = size_of_image(data)
+height, width = size_of_image(X)
 
 print(f"Height of input image is {height} and width of image is {width}")
