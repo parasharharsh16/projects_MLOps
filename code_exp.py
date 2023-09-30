@@ -68,7 +68,7 @@ dev_size = [0.1, 0.2, 0.3]
 
 for test,dev in getCombinationOfParameters(test_size,dev_size):
     train = 1-(test+dev)
-    X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (data,digits.target,test_size=test, dev_size=dev)
+    X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=test, dev_size=dev)
     X_test = preprocess_data(X_test)
     X_train = preprocess_data(X_train)
     X_dev = preprocess_data(X_dev)
