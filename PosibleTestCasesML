@@ -1,0 +1,26 @@
+What other test cases for ML functioanlities could we test_check_hpram_combination_values
+- Currently done
+    -- Data Spliting
+    -- hparam count and Values
+-Other
+  - tuning the hparam
+  - test the accuracy, false positive, false negative -- some metruc
+  gurantee: Regression test
+    -after training get infreence (prediction) in the regression _set
+    -when you deploy the model -- there should be a check as part od 
+    deployment pipeline inferences on the model should be exactly same as from the previous step
+    deployment pipeline -(model, regression_set,expected_prediction)
+      -- model(regression_set) == expected_result
+      -- interferance code diffrence between the training repo and deployment repo
+      -- the deployment coandidate model is the same as expected (based on model selectibliy)
+  - Generalaziblity for the model
+  - data quality  - is feature encoding as per requirent or not
+  - shape of data frame is as per the requirement or not
+  - overfitting, under fitting 
+      --testcase would be isOverfitting(model,benchmark_data)==true
+      -- is my code good enough to make the model learn something
+      -- 
+  
+  - Is the model getting saved or not
+  - is the model saved right or not
+anomaly detection - valid part of data curating/cleaning

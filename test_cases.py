@@ -1,5 +1,6 @@
-from utills import tune_hparams,read_digit,split_train_dev_test
+from utills import preprocess_data,tune_hparams,read_digit,split_train_dev_test
 from sklearn.model_selection import ParameterGrid
+import os
 def test_check_hpram_combination_count():
     #this test case is to check all hparam combinations are generated
     params_grid = {
@@ -24,6 +25,10 @@ def test_check_hpram_combination_values():
     assert expectedCombo2 in out_combinations
 
 
+def dummy_hparam():
+    params_grid = {"gamma": [0.001, 10, 100],"C": [0.1, 5, 10],}
+    return params_grid
+
 def test_data_splitting():
     X,y = read_digit()
     X = X[:100,:,:]
@@ -38,5 +43,20 @@ def test_data_splitting():
     assert(len(X_train) ==30)
     assert(len(X_dev) ==60)
     assert(len(X_test) ==10)
+
+def test_model_saving():
+    X,y = read_digit()
+    X_train = preprocess_data(X[:100,:,:])
+    y_train = y[:100]
+    X_dev = preprocess_data(X[:50,:,:])
+    y_dev = y[:50]
+    #tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params)
+    dummy_hparameters = dummy_hparam()
+    model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,dummy_hparameters)
+    assert(os.path.exists(model_path)==True)
+
+    
+
+
 
 
