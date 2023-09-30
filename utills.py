@@ -5,6 +5,7 @@ from sklearn import svm
 from sklearn.model_selection import ParameterGrid
 import itertools
 from sklearn import datasets, metrics
+from joblib import dump,load
 #Util defination
 # flatten the images
 def read_digit():
@@ -88,6 +89,7 @@ def predict_and_eval(model, X_test, y_test):
 
 def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params):
     best_accu = -1
+    best_model_path = ""
     optimized_model = None
     best_params = {}
     for hyper_params in ParameterGrid(hyper_params):
@@ -98,7 +100,12 @@ def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params):
             best_accu = current_accu
             best_params = hyper_params
             optimized_model = current_model
-    return optimized_model,best_params,best_accu
+            best_model_path =  "./models/best_model"+"_".join(["{}:{}".format(k,v) for k,v in hyper_params.items()])+".pkl"
+    # save the best_model
+    #dump(optimized_model,best_model_path)
+    print("Model saved {}",best_model_path)
+    
+    return best_model_path,best_params,best_accu
 
 def getCombinationOfParameters(test_size,dev_size):
     return list(itertools.product(test_size,dev_size))
@@ -109,4 +116,5 @@ def total_sample_number(x):
 def size_of_image(X):
     height, width = (X.shape)[1],(X.shape)[2]
     return height,width
-
+def load_model(best_model_path):
+    return load(best_model_path)
