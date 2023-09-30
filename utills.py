@@ -4,8 +4,15 @@ import matplotlib.pyplot as plt
 from sklearn import svm
 from sklearn.model_selection import ParameterGrid
 import itertools
+from sklearn import datasets, metrics
 #Util defination
 # flatten the images
+def read_digit():
+    digits = datasets.load_digits()
+    data = digits.images
+    return data,digits.target
+
+
 def preprocess_data(data):
     n_samples = len(data)
     data = data.reshape((n_samples,-1))
@@ -38,12 +45,9 @@ def split_train_dev_test(x, y, test_size, dev_size,random_state=1):
 
     X_train_temp,X_test,y_train_temp,y_test = split_data(x,y,test_size,random_state)
     
-    
-    # #spliting for train and dev form available train data
-    
-    # X_train,X_dev,y_train,y_dev = train_test_split(
-    #     X_train_temp,y_train_temp,test_size==dev_size,random_state=random_state
-    # )
+    # Inorder to overcome the fraction issue with dual splitting, we are getiing correct proportion for dev set after alreading spliting test set
+    dev_size = ((len(x)*dev_size)/len(X_train_temp))
+
     X_train,X_dev,y_train,y_dev = split_data(X_train_temp,y_train_temp,dev_size,random_state)
 
     return X_train,X_test,X_dev,y_train,y_test,y_dev

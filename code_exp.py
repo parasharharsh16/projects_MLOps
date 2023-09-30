@@ -17,7 +17,8 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters
+from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit
+
 
 ###############################################################################
 # Digits dataset
@@ -35,14 +36,11 @@ from utills import split_data, preprocess_data, train_module,split_train_dev_tes
 
 
 # 1. Load data
-digits = datasets.load_digits()
-
-
+X,y = read_digit()
 #2. Split the dataset for train and test
-data = digits.images
-#X_train, X_test, y_train, y_test = split_data(data,digits.target,test_size=0.3)
 
-X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (data,digits.target,test_size=0.2, dev_size=0.1)
+
+X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=0.2, dev_size=0.1)
 # _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
 # for ax, image, label in zip(axes, digits.images, digits.target):
 #     ax.set_axis_off()
