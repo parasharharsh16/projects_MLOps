@@ -103,3 +103,10 @@ def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params):
 def getCombinationOfParameters(test_size,dev_size):
     return list(itertools.product(test_size,dev_size))
 
+def total_sample_number(x):
+    return x.shape[0]
+    
+def size_of_image(X):
+    height, width = (X.shape)[1],(X.shape)[2]
+    return height,width
+

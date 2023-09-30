@@ -17,8 +17,7 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit
-
+from utills import split_data, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
 
 ###############################################################################
 # Digits dataset
@@ -76,7 +75,8 @@ for test,dev in getCombinationOfParameters(test_size,dev_size):
     model, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,params_grid)
     train_accu = predict_and_eval(model,X_train,y_train)
     test_accu = predict_and_eval(model,X_test,y_test)
-    print( f"test_size={test} dev_size={dev} train_size={train} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
+    #Commented print for Quiz so it can print current output
+    #print( f"test_size={test} dev_size={dev} train_size={train} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
 
 # print(f"Optimal parameters = {params}")
 # print(f"Accuracy parameters = {accuracy}")
@@ -85,7 +85,14 @@ for test,dev in getCombinationOfParameters(test_size,dev_size):
 
 
 # Predict the value of the digit on the test subset
-predict_and_eval(model,X_test,y_test)
+#predict_and_eval(model,X_test,y_test)
 
 
 #model = train_module(X_train,y_train,{'gamma': 0.001},model_type="svm")
+
+#Code for the Quiz
+print(f"Total samples in datasets are {total_sample_number(data)}")
+
+height, width = size_of_image(data)
+
+print(f"Height of input image is {height} and width of image is {width}")
