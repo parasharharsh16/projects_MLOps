@@ -25,4 +25,4 @@ jobs:
       - name: Quiz results
         run: echo "Quiz output for number of samples and size of the image"
       - name: Run python file
-        run: python code_exp.py
+        run: python code_exp.py 5 0.2 0.1 [svm,dt] config.json
