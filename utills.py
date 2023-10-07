@@ -6,6 +6,7 @@ from sklearn.model_selection import ParameterGrid
 import itertools
 from sklearn import datasets, metrics
 from joblib import dump,load
+from sklearn import tree
 #Util defination
 # flatten the images
 def read_digit():
@@ -21,7 +22,7 @@ def preprocess_data(data):
 
 def split_data(x,y,test_size,random_state=1):
     X_train,X_test,y_train,y_test = train_test_split(
-        x,y,test_size=test_size,random_state=random_state
+        x,y,test_size=test_size,random_state=random_state,shuffle=True
     )
     return X_train,X_test,y_train,y_test
 
@@ -29,7 +30,10 @@ def train_module(x,y,model_params,model_type = "svm"):
     if model_type == "svm":
         #create a classifier: a support vector classifier
         clf = svm.SVC
-    model = clf(**model_params)
+        model = clf(**model_params)
+    elif model_type == "dt":
+        model = tree.DecisionTreeClassifier(**model_params)
+    
     #train the model
     model.fit(x,y)
    # if x_dev.any()!= None and y_dev.any() != None:
@@ -87,23 +91,24 @@ def predict_and_eval(model, X_test, y_test):
 
     return metrics.accuracy_score(y_test,predicted)
 
-def tune_hparams_svm(X_train, X_dev, y_train, y_dev, hyper_params):
+def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params, model_type_name):
     best_accu = -1
     best_model_path = ""
     optimized_model = None
     best_params = {}
-    for hyper_params in ParameterGrid(hyper_params):
-        current_model = train_module(X_train, y_train, hyper_params, model_type="svm")
+    hyper_params_model = hyper_params[model_type_name]
+    for hyper_param in ParameterGrid(hyper_params_model):
+        current_model = train_module(X_train, y_train, hyper_param, model_type=model_type_name)
         current_accu = predict_and_eval(current_model, X_dev, y_dev)
 
         if current_accu > best_accu:
             best_accu = current_accu
-            best_params = hyper_params
+            best_params = hyper_param
             optimized_model = current_model
-            best_model_path =  "./models/best_model"+"_".join(["{}:{}".format(k,v) for k,v in hyper_params.items()])+".pkl"
+            best_model_path =  "./models/best_model_"+model_type_name+"_".join(["{}:{}".format(k,v) for k,v in hyper_params.items()])+".pkl"
     # save the best_model
     dump(optimized_model,best_model_path)
-    print("Model saved {}",best_model_path)
+    #print("Model saved {}",best_model_path)
     
     return best_model_path,best_params,best_accu
 
@@ -118,3 +123,6 @@ def size_of_image(X):
     return height,width
 def load_model(best_model_path):
     return load(best_model_path)
+
+
+

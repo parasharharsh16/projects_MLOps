@@ -17,8 +17,9 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from utills import split_data,load_model, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams_svm,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
+from utills import split_data,load_model, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
 
+import pandas as pd
 ###############################################################################
 # Digits dataset
 # --------------
@@ -58,27 +59,44 @@ X_dev = preprocess_data(X_dev)
 
 
 params_grid = {
-    "gamma": [0.001, 0.01, 0.1, 1, 10, 100],
-    "C": [0.1, 1, 2, 5, 10],
+    "svm":
+    {"gamma": [0.001, 0.01, 0.1, 1, 10, 100],
+    "C": [0.1, 1, 2, 5, 10]},
+    "dt": {
+    "max_depth":[1, 2,3, 4, 5]
 }
+}
+
+
 test_size =[0.1, 0.2, 0.3]
 dev_size = [0.1, 0.2, 0.3]
+model_types = ["svm","dt"]
+max_run = 5
+results_disc = []
 
 
-for test,dev in getCombinationOfParameters(test_size,dev_size):
-    train = 1-(test+dev)
-    X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=test, dev_size=dev)
-    X_test = preprocess_data(X_test)
-    X_train = preprocess_data(X_train)
-    X_dev = preprocess_data(X_dev)
+for i in range(max_run):
+    for model_name in model_types:
+        for test,dev in getCombinationOfParameters(test_size,dev_size):
+            train = 1-(test+dev)
+            X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=test, dev_size=dev)
+            X_test = preprocess_data(X_test)
+            X_train = preprocess_data(X_train)
+            X_dev = preprocess_data(X_dev)
 
-    model_path, params, dev_accu = tune_hparams_svm(X_train,X_dev,y_train,y_dev,params_grid)
-    model = load_model(best_model_path= model_path)
-    
-    train_accu = predict_and_eval(model,X_train,y_train)
-    test_accu = predict_and_eval(model,X_test,y_test)
-    #Commented print for Quiz so it can print current output
-    #print( f"test_size={test} dev_size={dev} train_size={train} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
+            model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,params_grid,model_type_name=model_name)
+            model = load_model(best_model_path= model_path)
+
+            train_accu = predict_and_eval(model,X_train,y_train)
+            test_accu = predict_and_eval(model,X_test,y_test)
+            #Commented print for Quiz so it can print current output
+            #print( f"model type = {model_name} test_size={test} dev_size={dev} train_size={train} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
+            current_result = {"current run" : i,"model type": model_name, "test_size": test ,"dev_size": dev, "train_size":train, "train_acc":train_accu, "dev_acc":dev_accu, "test_acc":test_accu}
+            results_disc.append(current_result)
+        #print( f"Current Run = {i} model type = {model_name} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
+
+result_df =  pd.DataFrame(results_disc)
+print(result_df.groupby("model type").describe().T)
 
 #Code for the Quiz
 #print(f"Total samples in datasets are {total_sample_number(X)}")
