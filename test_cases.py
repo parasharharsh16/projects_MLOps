@@ -1,4 +1,4 @@
-from utills import preprocess_data,tune_hparams,read_digit,split_train_dev_test
+from utills import preprocess_data,tune_hparams_svm,read_digit,split_train_dev_test
 from sklearn.model_selection import ParameterGrid
 import os
 def test_check_hpram_combination_count():
@@ -52,7 +52,7 @@ def test_model_saving():
     y_dev = y[:50]
     #tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params)
     dummy_hparameters = dummy_hparam()
-    model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,dummy_hparameters)
+    model_path, params, dev_accu = tune_hparams_svm(X_train,X_dev,y_train,y_dev,dummy_hparameters)
     assert(os.path.exists(model_path)==True)
 
     

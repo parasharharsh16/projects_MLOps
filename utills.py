@@ -87,7 +87,7 @@ def predict_and_eval(model, X_test, y_test):
 
     return metrics.accuracy_score(y_test,predicted)
 
-def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params):
+def tune_hparams_svm(X_train, X_dev, y_train, y_dev, hyper_params):
     best_accu = -1
     best_model_path = ""
     optimized_model = None

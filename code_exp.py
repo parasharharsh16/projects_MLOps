@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, metrics
 
-from utills import split_data,load_model, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
+from utills import split_data,load_model, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams_svm,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
 
 ###############################################################################
 # Digits dataset
@@ -72,7 +72,7 @@ for test,dev in getCombinationOfParameters(test_size,dev_size):
     X_train = preprocess_data(X_train)
     X_dev = preprocess_data(X_dev)
 
-    model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,params_grid)
+    model_path, params, dev_accu = tune_hparams_svm(X_train,X_dev,y_train,y_dev,params_grid)
     model = load_model(best_model_path= model_path)
     
     train_accu = predict_and_eval(model,X_train,y_train)
