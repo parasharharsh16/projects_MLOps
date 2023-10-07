@@ -20,6 +20,23 @@ from sklearn import datasets, metrics
 from utills import split_data,load_model, preprocess_data, train_module,split_train_dev_test,predict_and_eval,tune_hparams,getCombinationOfParameters,read_digit,total_sample_number,size_of_image
 
 import pandas as pd
+import sys 
+import json
+
+# python code_exp.py ~max_run, dev_size, test_size, model_type
+#names  args
+#package name args parse
+max_run = int(sys.argv[1])
+dev_size = float(sys.argv[2])  
+test_size = float(sys.argv[3])
+n = len(sys.argv[4]) 
+model_types = sys.argv[4][1:n-1] 
+model_types = model_types.split(',')
+config_file_Path = sys.argv[5]
+
+#python code_exp.py 5 0.2 0.2 svm
+
+
 ###############################################################################
 # Digits dataset
 # --------------
@@ -57,27 +74,32 @@ X_dev = preprocess_data(X_dev)
 # Create a classifier: a support vector classifier
 # Learn the digits on the train subset
 
+with open(config_file_Path) as json_file:
+    params_grid = json.load(json_file)
+# params_grid = {
+#     "svm":
+#     {"gamma": [0.001, 0.01, 0.1, 1, 10, 100],
+#     "C": [0.1, 1, 2, 5, 10]},
+#     "dt": {
+#     "max_depth":[1, 2,3, 4, 5]
+# }
+# }
 
-params_grid = {
-    "svm":
-    {"gamma": [0.001, 0.01, 0.1, 1, 10, 100],
-    "C": [0.1, 1, 2, 5, 10]},
-    "dt": {
-    "max_depth":[1, 2,3, 4, 5]
-}
-}
+# Model to use
+# number of runs
+#model params
+# dev/test size
 
-
-test_size =[0.1, 0.2, 0.3]
-dev_size = [0.1, 0.2, 0.3]
-model_types = ["svm","dt"]
-max_run = 5
+# test_size =0.2
+# dev_size = 0.2
+# model_types = ["svm","dt"]
+# max_run = 5
 results_disc = []
 
 
 for i in range(max_run):
     for model_name in model_types:
-        for test,dev in getCombinationOfParameters(test_size,dev_size):
+        for test,dev in getCombinationOfParameters([test_size],[dev_size]):
             train = 1-(test+dev)
             X_train,X_test,X_dev,y_train,y_test,y_dev = split_train_dev_test (X,y,test_size=test, dev_size=dev)
             X_test = preprocess_data(X_test)
