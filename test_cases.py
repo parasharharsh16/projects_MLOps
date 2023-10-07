@@ -26,7 +26,18 @@ def test_check_hpram_combination_values():
 
 
 def dummy_hparam():
-    params_grid = {"gamma": [0.001, 10, 100],"C": [0.1, 5, 10],}
+    {
+    "svm":
+    {"gamma": [0.001, 0.01, 0.1, 1, 10, 100],
+    "C": [0.1, 1, 2, 5, 10]},
+    "dt": {
+    "max_depth":[1, 2,3, 4, 5]
+}
+}
+    params_grid = {"svm":{"gamma": [0.001, 10, 100],"C": [0.1, 5, 10],},
+                    "dt": {
+                    "max_depth":[1, 2,3, 4, 5]
+                }}
     return params_grid
 
 def test_data_splitting():
@@ -52,7 +63,7 @@ def test_model_saving():
     y_dev = y[:50]
     #tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params)
     dummy_hparameters = dummy_hparam()
-    model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,dummy_hparameters)
+    model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,dummy_hparameters,model_type_name="dt")
     assert(os.path.exists(model_path)==True)
 
     
