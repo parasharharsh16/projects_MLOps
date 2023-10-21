@@ -12,6 +12,7 @@ import sys
 import json
 from sklearn.metrics import confusion_matrix
 import numpy as np
+from sklearn.metrics import f1_score
 
 # python code_exp.py ~max_run, dev_size, test_size, model_type
 #names  args
@@ -74,7 +75,10 @@ for i in range(max_run):
 print("Lets consider SVM model as production model and DT model as new candidate\n")
 
 for model_name in model_types:
-    print(f"Model accuracy for {model_name} is\n {model_accu[model_name]}")
+    print(f"Model accuracy for {model_name} is\n{model_accu[model_name]}\n")
+    model_pred = (model_disc[model_name]).predict(X_test)
+    svm_f1_score = f1_score(y_test, model_pred, average='weighted')
+    print(f"F1 score for {model_name} is {svm_f1_score}\n")
 
 print("Confusion matrix considering SVM model result as true labels")
 
