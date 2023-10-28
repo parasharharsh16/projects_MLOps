@@ -22,7 +22,7 @@ jobs:
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Running test cases
         run: pytest
-      - name: Quiz results
-        run: echo "Quiz output for number of samples and size of the image"
+      - name: Quiz 2 results
+        run: echo "Quiz 2 output for model comparision"
       - name: Run python file
-        run: python code_exp.py 5 0.2 0.1 [svm,dt] config.json
+        run: python quiz2.py 5 0.2 0.1 [svm,dt] config.json
