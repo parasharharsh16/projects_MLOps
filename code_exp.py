@@ -115,10 +115,10 @@ for i in range(max_run):
             #print( f"model type = {model_name} test_size={test} dev_size={dev} train_size={train} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
             current_result = {"current run" : i,"model type": model_name, "test_size": test ,"dev_size": dev, "train_size":train, "train_acc":train_accu, "dev_acc":dev_accu, "test_acc":test_accu}
             results_disc.append(current_result)
-        #print( f"Current Run = {i} model type = {model_name} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
+        print( f"Current Run = {i} model type = {model_name} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
 
 result_df =  pd.DataFrame(results_disc)
-print("Execution complete\n")
+#print("Execution complete\n")
 #print(result_df.groupby("model type").describe().T)
 
 #Code for the Quiz

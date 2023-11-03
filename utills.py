@@ -105,7 +105,9 @@ def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params, model_type_name):
             best_accu = current_accu
             best_params = hyper_param
             optimized_model = current_model
-            best_model_path =  "./models/best_model_"+model_type_name+"_".join(["{}:{}".format(k,v) for k,v in hyper_params.items()])+".pkl"
+            f'./models/best_model_{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.joblib'
+            best_model_path =  f'./models/best_model_{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.pkl'
+            #"./models/best_model_"+model_type_name+"_".join(["{}:{}".format(k,v) for k,v in hyper_params.items()])+".pkl"
     # save the best_model
     dump(optimized_model,best_model_path)
     #print("Model saved {}",best_model_path)
