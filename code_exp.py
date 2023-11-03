@@ -118,7 +118,8 @@ for i in range(max_run):
         #print( f"Current Run = {i} model type = {model_name} train_acc={train_accu} dev_acc={dev_accu} test_acc={test_accu}" )
 
 result_df =  pd.DataFrame(results_disc)
-print(result_df.groupby("model type").describe().T)
+print("Execution complete\n")
+#print(result_df.groupby("model type").describe().T)
 
 #Code for the Quiz
 #print(f"Total samples in datasets are {total_sample_number(X)}")

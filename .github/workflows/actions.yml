@@ -22,7 +22,13 @@ jobs:
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Running test cases
         run: pytest
-      - name: Quiz 2 results
-        run: echo "Quiz 2 output for model comparision"
-      - name: Run python file
-        run: python quiz2.py 5 0.2 0.1 [svm,dt] config.json
+      - name: Docker steps
+        run: |
+          docker build -t digits:v1 -f docker/Dockerfile .
+          rm models/*
+          echo "Models before execution"
+          ls -lh models
+          echo "Run docker image"
+          docker run -v ./models:/digits/models digits:v1
+          echo "Models after execution"
+          ls -lh models
