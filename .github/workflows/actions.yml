@@ -23,4 +23,4 @@ jobs:
       - name: Running test cases
         run: pytest
       - name: Docker steps
-        run: ./docker_rn.sh
+        run: sh docker_rn.sh
