@@ -4,9 +4,9 @@ COPY . /digits/
 WORKDIR /digits
 RUN pip install -r requirements.txt
 
-RUN chmod +x docker_run.sh
+RUN chmod +x entrypoint.sh
 # Define a volume to store the trained models
 VOLUME /digits/models
 
 # Train the models when the container runs
-CMD ["./docker_run.sh"]
+CMD ["./entrypoint.sh"]
