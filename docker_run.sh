@@ -8,4 +8,4 @@ docker build -t digits:v1 -f docker/Dockerfile .
 # docker run -v ./models:/digits/models digits:v1
 # echo "Models after execution"
 # ls -lh models
-docker run -it -p 5000:5000 digits:v1
+docker run -p 5000:5000 digits:v1
