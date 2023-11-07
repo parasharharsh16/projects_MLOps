@@ -9,6 +9,7 @@
 
 
 from flask import Flask, render_template, request
+
 import numpy as np
 from joblib import load
 from PIL import Image
@@ -24,10 +25,10 @@ def preprocess_image(image):
     image_array = image_array.reshape((n_samples,-1))
     return image_array
 
+
 @app.route("/")
 def hello_world():
     return render_template("template.html")
-
 
 @app.route('/upload', methods=['POST'])
 def imagecompare():
@@ -66,3 +67,4 @@ def pred_model():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
