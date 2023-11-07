@@ -7,6 +7,7 @@ import itertools
 from sklearn import datasets, metrics
 from joblib import dump,load
 from sklearn import tree
+
 #Util defination
 # flatten the images
 def read_digit():
@@ -125,6 +126,7 @@ def size_of_image(X):
     return height,width
 def load_model(best_model_path):
     return load(best_model_path)
+
 
 
 
