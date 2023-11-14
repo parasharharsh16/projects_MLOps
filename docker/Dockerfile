@@ -4,12 +4,15 @@ COPY . /digits/
 WORKDIR /digits
 RUN pip install -r requirements.txt
 
-RUN chmod +x entrypoint.sh
+#execute app in azure
+ENTRYPOINT [ "python","api/main.py" ]
+
+#RUN chmod +x entrypoint.sh
 # Define a volume to store the trained models
-VOLUME /digits/models
+#VOLUME /digits/models
 
 # # Run flask app when the container runs
-CMD ["./entrypoint.sh"]
+#CMD ["./entrypoint.sh"]
 # RUN export FLASK_APP=api/main
 
 # RUN flask run --host=0.0.0.0
