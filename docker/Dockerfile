@@ -8,5 +8,8 @@ RUN chmod +x entrypoint.sh
 # Define a volume to store the trained models
 VOLUME /digits/models
 
-# Train the models when the container runs
+# # Run flask app when the container runs
 CMD ["./entrypoint.sh"]
+# RUN export FLASK_APP=api/main
+
+# RUN flask run --host=0.0.0.0
