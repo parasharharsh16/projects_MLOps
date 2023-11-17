@@ -8,19 +8,32 @@
 #     return "<p>Hello, World!</p>"
 
 
+import io
 from flask import Flask, render_template, request
 
 import numpy as np
 from joblib import load
-from PIL import Image
+from PIL import Image,ImageOps
+from sklearn import datasets
 
 app = Flask(__name__)
 model = load('models/best_model_C-1_gamma-0.001.pkl')
+digits = datasets.load_digits()
+data = digits.images
+x= data
+y = digits.target
 def preprocess_image(image):
-    image = image.resize((8, 8))
-    image = image.convert("L")
+    image = Image.open(image)
+    image = image.convert('L')
+    image = (image.resize((8, 8)))
     # Convert the image to a NumPy array
     image_array = np.array(image)
+    #normalize image to sklearn format
+    image_array = (image_array/ 16).astype(float)
+    for i in range(8):
+        for j in range(8):
+            if image_array[i][j] >0:
+                image_array[i][j] = 16 - image_array[i][j]
     n_samples = len(image_array )
     image_array = image_array.reshape((n_samples,-1))
     return image_array
@@ -32,21 +45,20 @@ def hello_world():
 
 @app.route('/upload', methods=['POST'])
 def imagecompare():
-    image1 = Image.open(request.files["file1"])
-    image2 = Image.open(request.files["file1"])
+    image1 = request.files["file1"]
+    image2 = request.files["file2"]
 
     # Preprocess the images and convert them to numpy arrays
     image1 = preprocess_image(image1)
     image2 = preprocess_image(image2)
 
-
     # Classify digits
-    prediction1 = model.predict(image1.reshape(1, -1))[0]
-    prediction2 = model.predict(image2.reshape(1, -1))[0]
+    prediction1 = model.predict(image1.reshape(1,-1))[0]
+    prediction2 = model.predict(image2.reshape(1,-1))[0]
 
     # Compare predictions
     result = (prediction1 == prediction2)
-    return "<p>Image comparision returned " + str(result) + "</p>"
+    return "<p>Image comparision returned " + str(result) +"</p>"
 
 @app.route("/sum/<x>/<y>")
 def sum_num(x, y):
@@ -67,5 +79,4 @@ def pred_model():
 
 if __name__ == "__main__":
     #app.run(debug=True)
-    app.run(host="0.0.0.0", port= 80)
-
+    app.run(host="0.0.0.0", port= 8000)
