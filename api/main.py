@@ -9,19 +9,16 @@
 
 
 import io
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,jsonify
 
 import numpy as np
 from joblib import load
-from PIL import Image,ImageOps
-from sklearn import datasets
+from PIL import Image
+import json
 
 app = Flask(__name__)
 model = load('models/best_model_C-1_gamma-0.001.pkl')
-digits = datasets.load_digits()
-data = digits.images
-x= data
-y = digits.target
+
 def preprocess_image(image):
     image = Image.open(image)
     image = image.convert('L')
@@ -47,7 +44,7 @@ def hello_world():
 def imagecompare():
     image1 = request.files["file1"]
     image2 = request.files["file2"]
-
+    #if(str(type(image1))=="<class 'werkzeug.datastructures.file_storage.FileStorage'>"):
     # Preprocess the images and convert them to numpy arrays
     image1 = preprocess_image(image1)
     image2 = preprocess_image(image2)
@@ -60,12 +57,22 @@ def imagecompare():
     result = (prediction1 == prediction2)
     return "<p>Image comparision returned " + str(result) +"</p>"
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    image = request.json
+    image = json.loads(image)['image']
+    img_array = np.array(image)
+    try:
+        result = model.predict([img_array])
+        return jsonify({'result': str(result[0])})
+    except:
+        return jsonify({'error': 'Error Occured'})
+
 @app.route("/sum/<x>/<y>")
 def sum_num(x, y):
     x = int(x)
     y = int(y)
     return "<p>sum is " + str(x + y) + "</p>"
-
 
 @app.route("/model", methods=["POST"])
 def pred_model():

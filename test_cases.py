@@ -1,6 +1,11 @@
 from utills import preprocess_data,tune_hparams,read_digit,split_train_dev_test
 from sklearn.model_selection import ParameterGrid
 import os
+from api.main import app
+from sklearn import datasets
+import json
+import numpy as np
+
 def test_check_hpram_combination_count():
     #this test case is to check all hparam combinations are generated
     params_grid = {
@@ -66,8 +71,29 @@ def test_model_saving():
     model_path, params, dev_accu = tune_hparams(X_train,X_dev,y_train,y_dev,dummy_hparameters,model_type_name="dt")
     assert(os.path.exists(model_path)==True)
 
+
+def test_get_root():
+    response = app.test_client().get("/")
+    assert response.status_code == 200
+
+def test_post_predict():
+    # Load the digits dataset
+    digits = datasets.load_digits()
+    # Dictionary to store images for each digit
+    images_by_digit = {}
+    # Dictionary to hold lists of images for each digit
+    images_by_digit = {i: [] for i in range(10)}  # Create empty lists for digits 0-9
+    # Loop through the dataset and organize images by their digit labels
+    for image, label in zip(digits.images, digits.target):
+        images_by_digit[label].append(image)
+
     
-
-
+    #Adding assert for all the digits
+    for key in images_by_digit.keys():
+        processedimage = preprocess_data(np.array([(images_by_digit[key][2])]))
+        imagejson = {'image': processedimage[0].tolist()}
+        response = app.test_client().post("/predict",json = json.dumps(imagejson))
+        print(int(json.loads(response.data)['result']))
+        assert int(json.loads(response.data)['result']) == key
 
 
