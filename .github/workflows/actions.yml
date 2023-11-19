@@ -22,7 +22,7 @@ jobs:
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Running test cases
         run: pytest
-      - name: Docker steps
-        run: |
-          chmod +x docker_run.sh
-          sh ./docker_run.sh
+      # - name: Docker steps
+      #   run: |
+      #     chmod +x docker_run.sh
+      #     sh ./docker_run.sh
