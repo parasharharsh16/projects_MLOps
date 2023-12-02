@@ -1,8 +1,8 @@
-FROM python:3.9.17
+FROM dependency:v1
 #copy the whole code directory
 COPY . /digits/
 WORKDIR /digits
-RUN pip install -r requirements.txt
+#RUN pip install -r requirements.txt
 # # Run flask app when the container runs
 EXPOSE 8000
 CMD ["sh","./entrypoint.sh"]

@@ -22,6 +22,8 @@ jobs:
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Running test cases
         run: pytest
+      - name: running the code to build all models and showing metrics
+        run: python code_exp.py 5 0.2 0.1 [svm,dt,lr] config.json 
       # - name: Docker steps
       #   run: |
       #     chmod +x docker_run.sh

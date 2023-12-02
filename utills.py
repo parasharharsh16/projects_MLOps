@@ -7,6 +7,9 @@ import itertools
 from sklearn import datasets, metrics
 from joblib import dump,load
 from sklearn import tree
+from sklearn.preprocessing import normalize
+from sklearn.linear_model import LogisticRegression
+
 
 #Util defination
 # flatten the images
@@ -19,6 +22,7 @@ def read_digit():
 def preprocess_data(data):
     n_samples = len(data)
     data = data.reshape((n_samples,-1))
+    data = normalize(data)
     return data
 
 def split_data(x,y,test_size,random_state=1):
@@ -34,7 +38,9 @@ def train_module(x,y,model_params,model_type = "svm"):
         model = clf(**model_params)
     elif model_type == "dt":
         model = tree.DecisionTreeClassifier(**model_params)
-    
+    elif model_type == "lr":
+        model = LogisticRegression(**model_params)
+
     #train the model
     model.fit(x,y)
    # if x_dev.any()!= None and y_dev.any() != None:
@@ -106,9 +112,12 @@ def tune_hparams(X_train, X_dev, y_train, y_dev, hyper_params, model_type_name):
             best_accu = current_accu
             best_params = hyper_param
             optimized_model = current_model
-            f'./models/best_model_{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.joblib'
-            best_model_path =  f'./models/best_model_{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.pkl'
+            #f'./models/best_model_{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.joblib'
+            best_model_path =  f'./models/M22AIE210_best_model_{model_type_name}.joblib' #{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.joblib'
+            #f'./models/best_model_{"_".join([f"{k}-{v}" for k, v in best_params.items()])}.pkl'
             #"./models/best_model_"+model_type_name+"_".join(["{}:{}".format(k,v) for k,v in hyper_params.items()])+".pkl"
+        current_model_path = f'./models/M22AIE210_{model_type_name}_{"_".join([f"{v}" for k, v in hyper_param.items()])}.joblib'
+        dump(current_model,current_model_path)
     # save the best_model
     dump(optimized_model,best_model_path)
     #print("Model saved {}",best_model_path)

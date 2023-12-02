@@ -17,8 +17,12 @@ from PIL import Image
 import json
 
 app = Flask(__name__)
-model = load('models/best_model_C-1_gamma-0.001.pkl')
 
+def load_model():
+    lr_model = load('models/M22AIE210_best_model_lr.joblib')
+    svm_model = load('models/M22AIE210_best_model_svm.joblib')
+    dt_model = load('models/M22AIE210_best_model_dt.joblib')
+    return lr_model,svm_model,dt_model
 def preprocess_image(image):
     image = Image.open(image)
     image = image.convert('L')
@@ -35,6 +39,7 @@ def preprocess_image(image):
     image_array = image_array.reshape((n_samples,-1))
     return image_array
 
+lr_model,svm_model,dt_model = load_model()
 
 @app.route("/")
 def hello_world():
@@ -42,6 +47,7 @@ def hello_world():
 
 @app.route('/upload', methods=['POST'])
 def imagecompare():
+    model = svm_model
     image1 = request.files["file1"]
     image2 = request.files["file2"]
     #if(str(type(image1))=="<class 'werkzeug.datastructures.file_storage.FileStorage'>"):
@@ -57,9 +63,16 @@ def imagecompare():
     result = (prediction1 == prediction2)
     return "<p>Image comparision returned " + str(result) +"</p>"
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    image = request.json
+@app.route('/predict/<string:model_type>', methods=['POST'])
+def predict(model_type):
+    if(model_type=="lr"):
+        model = lr_model
+    elif(model_type=="svm"):
+        model = svm_model
+    elif(model_type=="dt"):
+        model = dt_model
+
+    image = json.dumps(request.json)
     image = json.loads(image)['image']
     img_array = np.array(image)
     try:
